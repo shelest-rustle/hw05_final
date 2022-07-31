@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Лента подписки{% endblock %}
+{% block header %}Лента подписки{% endblock %}
+{% block content %}
+{% load cache %}
+  <div class="container">
+    {% include 'posts/includes/switcher.html' %}
+    {% cache 20 index_page with page %}
+    {% for post in page %}
+      {% include 'posts/includes/post_list.html' %}
+    {% endfor %}
+    {% endcache %}
+  </div>
+  {% include 'posts/includes/paginator.html' %}
+{% endblock %}
