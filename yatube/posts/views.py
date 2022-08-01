@@ -10,11 +10,14 @@ from django.contrib.auth.decorators import login_required
 User = get_user_model()
 
 
+per_page = 10
+
+
 # Create your views here.
 def index(request):
     template = 'posts/index.html'
     posts = Post.objects.select_related('group').all()
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -28,7 +31,7 @@ def group_list(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
     posts = group.posts.select_related('author').all()
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -43,7 +46,7 @@ def profile(request, username):
     user_name = get_object_or_404(User, username=username)
     author_posts = user_name.posts.select_related('group', 'author')
     posts_count = author_posts.count()
-    paginator = Paginator(author_posts, 10)
+    paginator = Paginator(author_posts, per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     if request.user.is_authenticated:
@@ -147,7 +150,7 @@ def add_comment(request, post_id):
 def follow_index(request):
     template = 'posts/follow.html'
     list_of_posts = Post.objects.filter(author__following__user=request.user)
-    paginator = Paginator(list_of_posts, 20)
+    paginator = Paginator(list_of_posts, per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {'page_obj': page_obj}

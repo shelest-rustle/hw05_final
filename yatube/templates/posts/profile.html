@@ -28,7 +28,7 @@
           <ul>
             <li>
               Автор: {{ author }}
-              <a href="../{{ author }}/">все посты пользователя</a>
+              <a href="{% url 'posts:profile' author %}">все посты пользователя</a>
             </li>
             <li>
               Дата публикации: {{ post.pub_date|date:'d E Y' }} 
